@@ -1,0 +1,31 @@
+"""Validate docs frontmatter presence for markdown files."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+
+def main() -> int:
+    docs_dir = Path("docs")
+    if not docs_dir.exists():
+        print("docs-check: no docs directory; passing")
+        return 0
+
+    failures: list[str] = []
+    for path in docs_dir.rglob("*.md"):
+        text = path.read_text(encoding="utf-8")
+        if not text.startswith("---\n"):
+            failures.append(str(path))
+
+    if failures:
+        print("docs-check: missing frontmatter in:")
+        for item in failures:
+            print(f"- {item}")
+        return 1
+
+    print("docs-check: ok")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

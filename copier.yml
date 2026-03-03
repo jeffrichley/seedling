@@ -1,0 +1,81 @@
+_min_copier_version: "9.0"
+_subdirectory: "template"
+_templates_suffix: .jinja
+
+project_name:
+  type: str
+  help: Human-readable project name
+  default: Seedling App
+
+project_slug:
+  type: str
+  help: Kebab-case repository slug (derived from project_name; editable)
+  default: "{{ project_name | lower | replace(' ', '-') }}"
+
+package_name:
+  type: str
+  help: Python package name (derived from project_slug; editable)
+  default: "{{ project_slug | replace('-', '_') }}"
+
+cli_mode:
+  type: str
+  help: CLI generation mode
+  choices:
+    - none
+    - command
+    - repl
+  default: command
+
+cli_name:
+  type: str
+  help: CLI executable name used with `uv run <cli_name>` (derived; editable)
+  default: "{{ project_slug }}"
+  when: "{{ cli_mode != 'none' }}"
+
+include_ai_workflow:
+  type: bool
+  help: Include generic .ai docs bundle (COMMANDS/REF/RULES/HUMAN_RUNBOOK)
+  default: true
+
+justfile_targets:
+  type: str
+  help: Select optional justfile targets to include
+  multiselect: true
+  choices:
+    - test-cov
+    - e2e
+    - pre-commit
+    - commitizen
+    - complexity
+    - vulture
+    - darglint
+    - docstr-coverage
+    - audit
+    - bandit
+    - radon
+    - find-dupes
+    - docs-frontmatter-fix
+  default:
+    - test-cov
+    - e2e
+    - pre-commit
+    - commitizen
+    - complexity
+    - vulture
+    - darglint
+    - docstr-coverage
+    - audit
+    - bandit
+    - radon
+    - find-dupes
+    - docs-frontmatter-fix
+
+_exclude:
+  - "*.pyc"
+  - "__pycache__"
+  - ".DS_Store"
+  - ".git"
+
+_tasks:
+  - "{% if not include_ai_workflow %}rm -rf .ai{% else %}echo 'including .ai workflow bundle'{% endif %}"
+  - "{% if cli_mode == 'none' %}rm -f src/{{ package_name }}/cli.py tests/unit/test_cli.py{% else %}echo 'keeping cli files for mode {{ cli_mode }}'{% endif %}"

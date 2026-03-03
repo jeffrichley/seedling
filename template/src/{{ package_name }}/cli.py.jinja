@@ -1,0 +1,54 @@
+"""Typer CLI entrypoint."""
+
+from __future__ import annotations
+
+import typer
+{% if cli_mode == "repl" %}
+from textual.app import App, ComposeResult
+from textual.widgets import Footer, Header, Input, Static
+{% endif %}
+
+app = typer.Typer(help="{{ project_name }} CLI")
+
+
+@app.callback()
+def main() -> None:
+    """Root command group."""
+
+
+@app.command("hello")
+def hello(name: str = "world") -> None:
+    """Print a simple greeting."""
+    print(f"hello, {name}")
+
+{% if cli_mode == "repl" %}
+@app.command("repl")
+def repl() -> None:
+    """Run a tiny Textual-backed REPL loop."""
+    ReplApp().run()
+
+
+class ReplApp(App[None]):
+    """Minimal Textual REPL surface."""
+
+    BINDINGS = [("ctrl+c", "quit", "Quit")]
+
+    def compose(self) -> ComposeResult:
+        """Compose widgets for the REPL."""
+        yield Header(show_clock=False)
+        yield Static("Type and press Enter. Use 'exit' or 'quit' to close.")
+        yield Input(placeholder="{{ cli_name }} >")
+        yield Static("", id="output")
+        yield Footer()
+
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        """Handle submitted REPL input."""
+        text = event.value.strip()
+        event.input.value = ""
+        output = self.query_one("#output", Static)
+        if text.lower() in {"exit", "quit"}:
+            self.exit()
+            return
+        if text:
+            output.update(f"echo: {text}")
+{% endif %}

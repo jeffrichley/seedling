@@ -1,0 +1,82 @@
+[project]
+name = "{{ project_slug }}"
+version = "0.1.0"
+description = "Generated project from seedling"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+{% if cli_mode != 'none' %}
+  "typer>=0.21.0",
+{% endif %}
+{% if cli_mode == 'repl' %}
+  "textual>=0.80.0",
+{% endif %}
+]
+
+{% if cli_mode != 'none' %}
+[project.scripts]
+{{ cli_name }} = "{{ package_name }}.cli:app"
+{% endif %}
+
+[dependency-groups]
+{% set include_target_test_cov = "test-cov" in justfile_targets %}
+{% set include_target_pre_commit = "pre-commit" in justfile_targets %}
+{% set include_target_commitizen = "commitizen" in justfile_targets %}
+{% set include_target_complexity = "complexity" in justfile_targets %}
+{% set include_target_vulture = "vulture" in justfile_targets %}
+{% set include_target_darglint = "darglint" in justfile_targets %}
+{% set include_target_docstr_coverage = "docstr-coverage" in justfile_targets %}
+{% set include_target_audit = "audit" in justfile_targets %}
+{% set include_target_bandit = "bandit" in justfile_targets %}
+{% set include_target_radon = "radon" in justfile_targets %}
+{% set include_target_find_dupes = "find-dupes" in justfile_targets %}
+dev = [
+  "pytest>=9.0.0",
+  "ruff>=0.13.0",
+  "mypy>=1.18.2",
+{% if include_target_test_cov %}
+  "pytest-cov>=7.0.0",
+{% endif %}
+{% if include_target_pre_commit %}
+  "pre-commit>=4.3.0",
+{% endif %}
+{% if include_target_commitizen %}
+  "commitizen>=4.9.1",
+{% endif %}
+{% if include_target_complexity %}
+  "xenon>=0.9.3",
+{% endif %}
+{% if include_target_vulture %}
+  "vulture>=2.14",
+{% endif %}
+{% if include_target_darglint %}
+  "darglint>=1.8.1",
+{% endif %}
+{% if include_target_docstr_coverage %}
+  "docstr-coverage>=2.3.2",
+{% endif %}
+{% if include_target_audit %}
+  "pip-audit>=2.9.0",
+{% endif %}
+{% if include_target_bandit %}
+  "bandit>=1.8.6",
+{% endif %}
+{% if include_target_radon %}
+  "radon>=6.0.1",
+{% endif %}
+{% if include_target_find_dupes %}
+  "pylint>=3.3.8",
+{% endif %}
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatchling.build]
+packages = ["src/{{ package_name }}"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = ["unit: Unit tests"]

@@ -1,0 +1,26 @@
+# {{ project_name }}
+
+Generated from `seedling` with `cli_mode={{ cli_mode }}`.
+
+The generated `justfile` includes the non-Lily command surface selected at template prompt time (all optional targets default to enabled).
+
+{% if cli_mode == 'none' %}
+CLI scaffolding is disabled.
+{% elif cli_mode == 'command' %}
+Run:
+
+```bash
+uv run {{ cli_name }} --help
+uv run {{ cli_name }} hello
+```
+{% else %}
+The REPL command uses [Textual](https://textual.textualize.io/).
+
+Run:
+
+```bash
+uv run {{ cli_name }} --help
+uv run {{ cli_name }} hello
+uv run {{ cli_name }} repl
+```
+{% endif %}
