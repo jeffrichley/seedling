@@ -1,8 +1,54 @@
-# seedling
+# 🌱 seedling
 
 Copier template skeleton for minimal Python project generation.
 
-## Template Structure
+## 📦 Prerequisites
+
+Install these before using the template. Both are required: **uv** to run the template and work with Python in generated projects, and **just** because generated projects are built around a justfile (tests, lint, format, status, and the AI workflow all assume `just`).
+
+### uv (required)
+
+[uv](https://docs.astral.sh/uv/) is used to run Copier and to work with generated projects (install deps, run tests, run the CLI). Copier is pulled in automatically via `uv run --with copier`; you do not need to install Copier separately.
+
+**Install uv:**
+
+```bash
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or with Homebrew (macOS)
+brew install uv
+```
+
+**Verify:**
+
+```bash
+uv --version
+```
+
+### just (required)
+
+Generated projects use a [justfile](https://just.systems/) as the main command surface: `just test`, `just format`, `just lint`, `just status`, `just quality && just test`, etc. The template’s AI workflow (e.g. validate, status-sync, runbook) assumes `just` is available.
+
+**Install just:**
+
+```bash
+# macOS (Homebrew)
+brew install just
+
+# Or with cargo
+cargo install just
+```
+
+**Verify:**
+
+```bash
+just --version
+```
+
+---
+
+## 📁 Template Structure
 
 - Single template root: `template/`
 - Mode selection: `cli_mode = none | command | repl`
@@ -10,15 +56,15 @@ Copier template skeleton for minimal Python project generation.
 
 Common files are rendered once and mode differences are handled with Jinja conditionals and post-copy pruning tasks.
 
-## Quickstart
+## 🚀 Quickstart
 
-From the `seedling` repo:
+From anywhere (using the repo):
 
 ```bash
-uv run --with copier copier copy . ./my-new-project --trust
+uv run --with copier copier copy gh:jeffrichley/seedling ./my-new-project --trust
 ```
 
-## Non-Interactive Generation Examples
+## 📋 Non-Interactive Generation Examples
 
 Set a reusable optional-target selection (all defaults enabled):
 
@@ -29,7 +75,7 @@ DEFAULT_JUSTFILE_TARGETS='["test-cov","e2e","pre-commit","commitizen","complexit
 ### `cli_mode=none`
 
 ```bash
-uv run --with copier copier copy . /tmp/seedling-none --trust \
+uv run --with copier copier copy gh:jeffrichley/seedling /tmp/seedling-none --trust \
   -d project_name='Seedling None Demo' \
   -d project_slug='seedling-none-demo' \
   -d package_name='seedling_none_demo' \
@@ -44,7 +90,7 @@ uv run pytest -q
 ### `cli_mode=command`
 
 ```bash
-uv run --with copier copier copy . /tmp/seedling-command --trust \
+uv run --with copier copier copy gh:jeffrichley/seedling /tmp/seedling-command --trust \
   -d project_name='Seedling Command Demo' \
   -d project_slug='seedling-command-demo' \
   -d package_name='seedling_command_demo' \
@@ -60,7 +106,7 @@ uv run commanddemo hello --name matrix
 ### `cli_mode=repl`
 
 ```bash
-uv run --with copier copier copy . /tmp/seedling-repl --trust \
+uv run --with copier copier copy gh:jeffrichley/seedling /tmp/seedling-repl --trust \
   -d project_name='Seedling Repl Demo' \
   -d project_slug='seedling-repl-demo' \
   -d package_name='seedling_repl_demo' \
@@ -77,7 +123,7 @@ uv run repldemo repl --help
 ### Minimal optional-target profile
 
 ```bash
-uv run --with copier copier copy . /tmp/seedling-minimal --trust \
+uv run --with copier copier copy gh:jeffrichley/seedling /tmp/seedling-minimal --trust \
   -d project_name='Seedling Minimal Demo' \
   -d project_slug='seedling-minimal-demo' \
   -d package_name='seedling_minimal_demo' \
@@ -87,7 +133,7 @@ uv run --with copier copier copy . /tmp/seedling-minimal --trust \
   -d justfile_targets='[]'
 ```
 
-### Questions
+### ❓ Questions
 
 - `project_name`
 - `project_slug` (derived from `project_name`, editable)
@@ -100,7 +146,7 @@ uv run --with copier copier copy . /tmp/seedling-minimal --trust \
   - `darglint`, `docstr-coverage`, `audit`, `bandit`, `radon`, `find-dupes`
   - `docs-frontmatter-fix`
 
-### Conditional Rules (Defined)
+### 📐 Conditional Rules (Defined)
 
 - `cli_mode=none`:
   - no `[project.scripts]` entry
