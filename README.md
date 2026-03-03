@@ -8,7 +8,7 @@ Install these before using the template. Both are required: **uv** to run the te
 
 ### uv (required)
 
-[uv](https://docs.astral.sh/uv/) is used to run Copier and to work with generated projects (install deps, run tests, run the CLI). Copier is pulled in automatically via `uv run --with copier`; you do not need to install Copier separately.
+[uv](https://docs.astral.sh/uv/) is used to run Copier and to work with generated projects (install deps, run tests, run the CLI). **You do not need to install Copier** — `uv run --with copier` installs and runs it automatically. Only **uv** and **just** need to be installed on your system.
 
 **Install uv:**
 
